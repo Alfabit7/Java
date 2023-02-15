@@ -1,5 +1,6 @@
 package homework_2;
 
+import java.util.Random;
 /**
  * task_1
  * 
@@ -8,7 +9,8 @@ import java.util.Scanner;// Ипортируем метод для считыв�
 import java.io.File; // Импортируем метод для работы с файлом
 // import java.io.IOException;
 import java.io.FileWriter;
-import java.io.Writer;
+// import java.io.Writer;
+import java.lang.reflect.Array;
 
 public class task_1 {
     private static Scanner input = new Scanner(System.in);// через input.nextInt(); будем считывать данные
@@ -20,7 +22,8 @@ public class task_1 {
         int numberA = getNumberByUser("Введите число которое хотите возвести в степень");
         int numberB = getNumberByUser("Введите  степень в которую хотите возвести число " + numberA);
         System.out.println("Вы ввели а = " + numberA + ", b = " + numberB);
-        WriteData(numberA, numberB);
+        String[] data = convertInput(numberA, numberB);
+        WriteData(data);
     }
 
     /**
@@ -35,30 +38,47 @@ public class task_1 {
         return num;
     }
 
-    public static File WriteData(int numA, int numB) {
+    /**
+     * Функция записывает данны из ввода пользователя
+     * 
+     * @param numA то что возводим в степень
+     * @param numB в какую степень возводим
+     * @return
+     */
+    public static File WriteData(String[] data) {
         File newFile = new File("C:/Users/Andrey/Desktop/GB/WEB_developer/Java/homework_2/input.txt");
-
         try {
             if (newFile.createNewFile()) {
-                System.out.printf("yes write");
-                // FileWriter writer = new FileWriter(
-                // "C:/Users/Andrey/Desktop/GB/WEB_developer/Java/homework_2/input.txt");
-                // для записи используем FileWriter. writer ссылается на путь к файлу или файл
+                System.out.println("yes write");
                 FileWriter writer = new FileWriter(newFile); // ссылается на файл
-                writer.write(Integer.toString(numA, numB));// записыаем то что ввел пользовалеть предварительно поменяв
-                                                           // тип в строку
+                for (String string : data) {
+                    System.out.println(string + "\n");
+                    writer.write(string);
+                }
                 writer.flush();
+
             } else {
-                FileWriter writer = new FileWriter(newFile, true);
-                writer.write(Integer.toString(numA, numB));
-                System.out.println("else");
+                System.out.println("the file contains the valuse 'a' and 'b'. File overwritten");
+                FileWriter writer = new FileWriter(newFile); // ссылается на файл
+                for (String string : data) {
+                    System.out.println(string);
+                    writer.write(string + "\n");
+                }
+                writer.flush();
             }
 
         } catch (Exception e) {
-            // TODO: handle exception
-            System.out.println("not write");
+            System.out.println("Not write. Catch Exeption");
         }
         return newFile;
     }
 
+    public static String[] convertInput(int numA, int numB) {
+        String aNum = Integer.toString(numA);
+        String bNum = Integer.toString(numB);
+        String row1 = "a " + aNum;
+        String row2 = "b " + bNum;
+        String[] arrayRow = new String[] { row1, row2 };
+        return arrayRow;
+    }
 }
