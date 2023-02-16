@@ -19,8 +19,7 @@ public class task_1 {
         int numberA = getNumberByUser("Введите число которое хотите возвести в степень");
         int numberB = getNumberByUser("Введите степень в которую хотите возвести число " + numberA);
         System.out.println("Вы ввели а = " + numberA + ", b = " + numberB);
-        String[] data = convertInput(numberA, numberB);
-        // String[] randomData = getRandomElement(data);
+        String[] data = convertInputToArr(numberA, numberB);
         WriteData(data);
 
     }
@@ -47,44 +46,42 @@ public class task_1 {
     public static File WriteData(String[] data) {
         File newFile = new File("C:/Users/Andrey/Desktop/GB/WEB_developer/Java/homework_2/input.txt");
         try {
+            FileWriter writer = new FileWriter(newFile); // ссылается на файл
             if (newFile.createNewFile()) {
-                System.out.println("yes write");
-                FileWriter writer = new FileWriter(newFile); // ссылается на файл
                 for (String string : data) {
-                    System.out.println(string + "\n");
-                    writer.write(string);
-                }
-                // writer.flush();
-
-            } else {
-                System.out.println("the file contains the valuse 'a' and 'b'. File overwritten");
-                FileWriter writer = new FileWriter(newFile); // ссылается на файл
-                for (String string : data) {
-                    System.out.println(string);
                     writer.write(string + "\n");
                 }
-                writer.flush();
+            } else {
+                for (String string : data) {
+                    writer.write(string + "\n");
+                }
             }
-
+            writer.flush();
         } catch (Exception e) {
             System.out.println("Not write. Catch Exeption");
         }
         return newFile;
     }
 
-    public static int getRandomElement() {
-        int numRandom = new Random().nextInt(7);
-        return numRandom;
-    }
-
-    public static String[] convertInput(int numA, int numB) {
+    /**
+     * Функция получает на вход два числа a b , приводит их к виду строки a 20 b 30
+     * после чего создает и возвращает массив из 2ух элементов где первым элементом
+     * массива может быть любая из строк или a или b
+     * 
+     * @param numA число a, которое ввел пользователь для возведения в степень b
+     * @param numB число b, которое ввел пользователь, степень в которую нужно
+     *             возвести число a
+     * @return масси из 2 строчных элементов arr = {"a randomNumber", "b
+     *         randomNumber"} или arr = {"b randomNumber", "a randomNumber"}
+     */
+    public static String[] convertInputToArr(int numA, int numB) {
         String aNum = Integer.toString(numA);
         String bNum = Integer.toString(numB);
         String row1 = "a " + aNum;
         String row2 = "b " + bNum;
-        int rand = getRandomElement();
+        int numRandom = new Random().nextInt(7);
         String[] arrayRow = new String[2];
-        if (rand < 3) {
+        if (numRandom < 3) {
             arrayRow[0] = row1;
             arrayRow[1] = row2;
         } else {
