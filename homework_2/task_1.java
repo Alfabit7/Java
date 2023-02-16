@@ -8,9 +8,10 @@ import java.util.Random;
 import java.util.Scanner;// Ипортируем метод для считывания данных с консоли
 import java.io.File; // Импортируем метод для работы с файлом
 import java.io.FileWriter;
-import java.lang.reflect.Array;
 import java.io.FileNotFoundException;
 // import java.io.FileReader;
+// import java.lang.ProcessBuilder.Redirect.Type;
+// import java.lang.reflect.Array;
 // import java.security.PublicKey;
 // import java.io.BufferedReader;
 // import java.lang.reflect.Array;
@@ -34,6 +35,10 @@ public class task_1 {
         // for (String string : res) {
         // System.out.println(string);
         // }
+        int[] valuesBandA = getValueNumber(res);
+        for (int i : valuesBandA) {
+            System.out.println("a and b " + i);
+        }
 
     }
 
@@ -125,11 +130,29 @@ public class task_1 {
         return resultArr;
     }
 
+    /**
+     * Функция извлекает из массива который возвращает readFileInput значения a и b
+     * arr =[a,b];
+     * 
+     * @param Array принимает массив из строк arr = ["a 23', "b 34"]
+     * @return возвращает массив с значениями a и b arr =[a,b];
+     */
     public static int[] getValueNumber(String[] Array) {
         int a = 0;
         int b = 0;
+        String[] val = new String[2];
         int[] arr = new int[2];
-
+        for (String str : Array) {
+            if (str.contains("b")) {
+                val = str.split(" ");
+                b = Integer.parseInt(val[1]);
+            } else {
+                val = str.split(" ");
+                a = Integer.parseInt(val[1]);
+            }
+            arr[0] = a;
+            arr[1] = b;
+        }
         return arr;
 
     }
