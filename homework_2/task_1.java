@@ -8,37 +8,28 @@ import java.util.Random;
 import java.util.Scanner;// Ипортируем метод для считывания данных с консоли
 import java.io.File; // Импортируем метод для работы с файлом
 import java.io.FileWriter;
+// import java.lang.FdLibm.Pow;
+import java.lang.reflect.Array;
 import java.io.FileNotFoundException;
-// import java.io.FileReader;
-// import java.lang.ProcessBuilder.Redirect.Type;
-// import java.lang.reflect.Array;
-// import java.security.PublicKey;
-// import java.io.BufferedReader;
-// import java.lang.reflect.Array;
-// import java.io.IOException;
-// import java.io.Writer;
-// import java.security.spec.ECFieldF2m;
+import java.util.InputMismatchException;
 
 public class task_1 {
-    private static Scanner input = new Scanner(System.in);// через input.nextInt(); будем
-                                                          // считывать данные
+    private static Scanner input = new Scanner(System.in);// через input.nextInt(); будем считывать данные
 
     public static void main(String[] args) throws FileNotFoundException {
-        // String nameFile = "input.txt";
-        String nameFile = "C:/Users/Andrey/Desktop/GB/WEB_developer/Java/homework_2/input.txt";
-        int numberA = getNumberByUser("Введите число которое хотите возвести в степень");
-        int numberB = getNumberByUser("Введите степень в которую хотите возвести число " + numberA);
+        String nameFileInput = "C:/Users/Andrey/Desktop/GB/WEB_developer/Java/homework_2/input.txt";
+        String nameFileOutput = "C:/Users/Andrey/Desktop/GB/WEB_developer/Java/homework_2/output.txt";
+        double numberA = getNumberByUser("Введите число которое хотите возвести в степень");
+        double numberB = getNumberByUser("Введите степень в которую хотите возвести число " + numberA);
         System.out.println("Вы ввели а = " + numberA + ", b = " + numberB);
         String[] data = convertInputToArr(numberA, numberB);
-        WriteData(data);
-        String[] res = readFileInput(nameFile); // хранит массив состоящий из строк файла input.txt
-        // for (String string : res) {
-        // System.out.println(string);
-        // }
-        int[] valuesBandA = getValueNumber(res);
-        for (int i : valuesBandA) {
-            System.out.println("a and b " + i);
-        }
+        WriteData(data, nameFileInput);
+        String[] res = readFileInput(nameFileInput); // хранит массив состоящий из строк файла input.txt
+        Double[] valuesBandA = getValueNumber(res);
+        double a = valuesBandA[0];
+        double b = valuesBandA[1];
+        Double result = exponentiation(a, b, nameFileOutput); // вычисляем результат возведения в стпень
+        System.out.printf("%f в степени %f = %s", a, b, result);
 
     }
 
@@ -48,9 +39,9 @@ public class task_1 {
      * @param text сообщение которое будет выведено пользователю перед вводом числа
      * @return возвращает число введеное пользователем
      */
-    public static int getNumberByUser(String text) {
+    public static Double getNumberByUser(String text) {
         System.out.println(text);
-        int num = input.nextInt();
+        Double num = input.nextDouble();
         return num;
     }
 
@@ -61,8 +52,10 @@ public class task_1 {
      * @param numB в какую степень возводим
      * @return
      */
-    public static File WriteData(String[] data) {
-        File newFile = new File("C:/Users/Andrey/Desktop/GB/WEB_developer/Java/homework_2/input.txt");
+    public static File WriteData(String[] data, String nameFile) {
+        // File newFile = new
+        // File("C:/Users/Andrey/Desktop/GB/WEB_developer/Java/homework_2/input.txt");
+        File newFile = new File(nameFile);
         try {
             FileWriter writer = new FileWriter(newFile); // ссылается на файл
             if (newFile.createNewFile()) {
@@ -92,12 +85,12 @@ public class task_1 {
      * @return масси из 2 строчных элементов arr = {"a randomNumber", "b
      *         randomNumber"} или arr = {"b randomNumber", "a randomNumber"}
      */
-    public static String[] convertInputToArr(int numA, int numB) {
-        String aNum = Integer.toString(numA);
-        String bNum = Integer.toString(numB);
+    public static String[] convertInputToArr(Double numA, Double numB) {
+        String aNum = Double.toString(numA);
+        String bNum = Double.toString(numB);
         String row1 = "a " + aNum;
         String row2 = "b " + bNum;
-        int numRandom = new Random().nextInt(7);
+        Double numRandom = new Random().nextDouble(7);
         String[] arrayRow = new String[2];
         if (numRandom < 3) {
             arrayRow[0] = row1;
@@ -117,44 +110,77 @@ public class task_1 {
      * @throws FileNotFoundException
      */
 
-    public static String[] readFileInput(String nameFile) throws FileNotFoundException {
+    public static String[] readFileInput(String nameFile) {
         File file = new File(nameFile);
         String line = "";
         String[] resultArr = new String[2];
-        Scanner scanner = new Scanner(file);
-        while (scanner.hasNextLine()) {
-            line = line.concat(scanner.nextLine() + ";");
+        Scanner scanner;
+        try {
+            scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                line = line.concat(scanner.nextLine() + ";");
+            }
+            resultArr = line.split(";");
+            line = "";
+        } catch (FileNotFoundException e) {
+            System.out.println("readFileInput");
         }
-        resultArr = line.split(";");
-        line = "";
+
         return resultArr;
     }
 
     /**
-     * Функция извлекает из массива который возвращает readFileInput значения a и b
+     * Функция извлекает из массива, который получается в результате работы функции
+     * readFileInput значения a и b
      * arr =[a,b];
      * 
      * @param Array принимает массив из строк arr = ["a 23', "b 34"]
-     * @return возвращает массив с значениями a и b arr =[a,b];
+     * @return возвращает массив int с значениями a и b arr =[a,b];
      */
-    public static int[] getValueNumber(String[] Array) {
-        int a = 0;
-        int b = 0;
+    public static Double[] getValueNumber(String[] Array) {
+        double a = 0;
+        double b = 0;
         String[] val = new String[2];
-        int[] arr = new int[2];
-        for (String str : Array) {
-            if (str.contains("b")) {
-                val = str.split(" ");
-                b = Integer.parseInt(val[1]);
-            } else {
-                val = str.split(" ");
-                a = Integer.parseInt(val[1]);
+        Double[] arr = new Double[2];
+
+        try {
+            for (String str : Array) {
+                if (str.contains("b")) {
+                    val = str.split(" ");
+                    b = Double.parseDouble(val[1]);
+                } else {
+                    val = str.split(" ");
+                    a = Double.parseDouble(val[1]);
+                }
+                arr[0] = a;
+                arr[1] = b;
             }
-            arr[0] = a;
-            arr[1] = b;
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println(" exception getValueNumber");
         }
+
         return arr;
 
+    }
+
+    public static Double exponentiation(Double a, Double b, String nameFileOutput) {
+        // Быстрое возведение в степень
+        // if (b == 0) {
+        // return 1.0;
+        // }
+        // if (b % 2 == 0) {
+        // Double result = exponentiation(a, b / 2);
+        // return result * result;
+        // } else {
+        // return a * exponentiation(a, b - 1);
+        // }
+        double res = Math.pow(a, b);
+        String[] data = new String[1];
+        data[0] = Double.toString(res);
+        WriteData(data, nameFileOutput);
+        return res;
     }
 
 }
