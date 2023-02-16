@@ -9,18 +9,31 @@ import java.util.Scanner;// Ипортируем метод для считыв�
 import java.io.File; // Импортируем метод для работы с файлом
 import java.io.FileWriter;
 import java.lang.reflect.Array;
+import java.io.FileNotFoundException;
+// import java.io.FileReader;
+// import java.security.PublicKey;
+// import java.io.BufferedReader;
+// import java.lang.reflect.Array;
 // import java.io.IOException;
 // import java.io.Writer;
+// import java.security.spec.ECFieldF2m;
 
 public class task_1 {
-    private static Scanner input = new Scanner(System.in);// через input.nextInt(); будем считывать данные
+    private static Scanner input = new Scanner(System.in);// через input.nextInt(); будем
+                                                          // считывать данные
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
+        // String nameFile = "input.txt";
+        String nameFile = "C:/Users/Andrey/Desktop/GB/WEB_developer/Java/homework_2/input.txt";
         int numberA = getNumberByUser("Введите число которое хотите возвести в степень");
         int numberB = getNumberByUser("Введите степень в которую хотите возвести число " + numberA);
         System.out.println("Вы ввели а = " + numberA + ", b = " + numberB);
         String[] data = convertInputToArr(numberA, numberB);
         WriteData(data);
+        String[] res = readFileInput(nameFile); // хранит массив состоящий из строк файла input.txt
+        // for (String string : res) {
+        // System.out.println(string);
+        // }
 
     }
 
@@ -90,4 +103,35 @@ public class task_1 {
         }
         return arrayRow;
     }
+
+    /**
+     * Функция считывает построчно файл input.txt и записывает строки в массив
+     * 
+     * @param nameFile путь к файлу
+     * @return возвращет массив где элементы каждая строка файла input.txt
+     * @throws FileNotFoundException
+     */
+
+    public static String[] readFileInput(String nameFile) throws FileNotFoundException {
+        File file = new File(nameFile);
+        String line = "";
+        String[] resultArr = new String[2];
+        Scanner scanner = new Scanner(file);
+        while (scanner.hasNextLine()) {
+            line = line.concat(scanner.nextLine() + ";");
+        }
+        resultArr = line.split(";");
+        line = "";
+        return resultArr;
+    }
+
+    public static int[] getValueNumber(String[] Array) {
+        int a = 0;
+        int b = 0;
+        int[] arr = new int[2];
+
+        return arr;
+
+    }
+
 }
