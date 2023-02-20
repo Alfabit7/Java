@@ -8,7 +8,6 @@ import java.util.Random;
 import java.util.Scanner;// Ипортируем метод для считывания данных с консоли
 import java.io.File; // Импортируем метод для работы с файлом
 import java.io.FileWriter;
-// import java.lang.FdLibm.Pow;
 import java.lang.reflect.Array;
 import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
@@ -21,7 +20,7 @@ public class task_1 {
         String nameFileOutput = "C:/Users/Andrey/Desktop/GB/WEB_developer/Java/homework_2/output.txt";
         double numberA = getNumberByUser("Введите число которое хотите возвести в степень");
         double numberB = getNumberByUser("Введите степень в которую хотите возвести число " + numberA);
-        System.out.println("Вы ввели а = " + numberA + ", b = " + numberB);
+        System.out.println("Вы ввели а = " + numberA + numberA + ", b = " + numberB);
         String[] data = convertInputToArr(numberA, numberB);
         WriteData(data, nameFileInput);
         String[] res = readFileInput(nameFileInput); // хранит массив состоящий из строк файла input.txt
